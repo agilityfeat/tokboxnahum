@@ -1,0 +1,101 @@
+%div{"id" => "myPublisherDiv"}
+%div{"id" => "subscribersDiv"}
+
+%div{"id" => "history"}
+  %form
+    %section{"class" => "sect"}
+      %textarea{"id" => "txtMsg", "rows" => "3", "cols" => "70", "placeholder" => "Hit Enter key to send your message..."}
+      %br
+      %input{"type" => "file", "id" => "files", "name" => "files[]", "multiple" => "" }
+      %output{"id"=> "list"}
+      %div{"class" => "progress"}
+        %div{"class" => "label"}Send Progress:
+        %progress{"id" => "sendProgress", "max" => "0", "value"=>"0"}
+      %div{"class" => "progress"}
+        %div{"class" => "label"}Recieve Progress:
+        %progress{"id" => "receiveProgress", "max" => "0", "value"=>"0"}
+
+      %a{"id" => "received"}
+
+- content_for :webrtcjs do
+  = javascript_include_tag "//static.opentok.com/v2/js/opentok.min.js"
+  = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"
+
+:javascript
+  var apiKey = '45173502';
+  var sessionId = "#{@room.session_id}"
+  var session = OT.initSession(apiKey, sessionId); 
+  var token = '#{@opentTok_token}';
+
+  // Create a session object
+  var session = OT.initSession(apiKey, sessionId); 
+  
+
+  //Every time someone publishes an audio-video stream to the session you are connected to, the Session object dispatches a streamCreated event.
+  var msgHistory = document.querySelector("#history");
+  session.on(
+  { 
+    streamCreated: function(event) { 
+    				session.subscribe(event.stream, 'subscribersDiv', {insertMode: 'append'}); 
+          		    }
+    ,"signal:chat": function(event){ 
+       var msg = document.createElement("p");
+       msg.innerHTML = event.data;
+       msgHistory.appendChild(msg);
+       msg.scrollIntoView();
+      }
+  });
+
+  //To send a signal to a specific client in a session, call the signal() method of the Session object and set the to property of the signal parameter. When another client connected to the session  sends a message, the session's signal event handler is invoked:
+  var txtMsg = document.querySelector("#txtMsg")
+  
+  $("#txtMsg").keydown(function(event){
+    if(event.keyCode == 13){
+      session.signal({
+        type: "chat",
+        data: txtMsg.value
+      }, function(error){
+       if(error){
+          console.log("signal error (" + error.code + "): " + error.message);
+        }else{
+          txtMsg.value = "";
+         }
+       }
+      );
+    }
+  }).focus(function(){
+    this.value = "";
+  }).blur(function(){
+    if(this.value == ""){
+      this.attr("placeholder", "Hit Enter key to send your message...");
+    }
+  });
+
+  // connect to the session
+  session.connect(token, function(error) {
+   if (error) {
+     console.log(error.message);
+   } else {
+     session.publish('myPublisherDiv', {width: 320, height: 240}); 
+   } 
+  });
+
+  function bytesToSize(bytes) {
+    if(bytes == 0) return '0 Byte';
+    var k = 1000;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+  }
+
+  function handleFileSelect(evt)
+  {
+    var files = evt.target.files; //Filelist objects
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+      output.push("<li><strong>", escape(f.name),"</strong> (", f.type || "n/a", ") - ", bytesToSize(f.size), " </li>");
+    }
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'; 
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
