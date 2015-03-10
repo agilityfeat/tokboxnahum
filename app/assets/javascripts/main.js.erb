@@ -6,7 +6,7 @@ connection.body = document.querySelector('#file-progress');
 connection.session = {
     data: true
 };
-// connection.maxParticipantsAllowed = 1;
+
 connection.direction = 'one-to-one';
 document.getElementById('btnCreateChannel').onclick = function() {
     connection.open(document.getElementById('txtChannelID').value || 'txtChannelID');
