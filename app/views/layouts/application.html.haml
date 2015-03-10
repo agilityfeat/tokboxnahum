@@ -2,12 +2,18 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, user-scalable=no", "name" => "viewport"}
+    %meta{:content => "IE=edge,chrome=1", "http-equiv" => "X-UA-Compatible"}
     %title Video Chat App
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
-    = yield(:webrtcjs)
+    = javascript_include_tag "//static.opentok.com/v2/js/opentok.min.js"
+    :javascript
+      document.createElement('article');
+      document.createElement('footer');
     = csrf_meta_tags
   %body
     = yield
-    = javascript_include_tag "adapter"
-    = javascript_include_tag "filetransfer"
+    = javascript_include_tag "https://cdn.firebase.com/js/client/2.2.1/firebase.js"
+    = javascript_include_tag "//cdn.webrtc-experiment.com/RTCMultiConnection.js"
+    = javascript_include_tag "main"

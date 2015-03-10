@@ -33,6 +33,9 @@ gem "binding_of_caller" # better errors consolse
 gem 'haml-rails'
 gem 'html2haml'
 gem "opentok", "~> 2.2"
+gem 'bootstrap-sass'
+gem 'autoprefixer-rails'
+gem 'sprockets-rails'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -1,25 +1,31 @@
-%div{"id" => "myPublisherDiv"}
-%div{"id" => "subscribersDiv"}
+.row
+  .col-md-12
+    %div{"class" => "row", "id" => "dataChannelRow"}
+      %div{"class" => "col-md-4 col-md-offset-3"}
+        %div{"class" => "panel panel-default"}
+          .panel-body
+            %input{"id" => "txtChannelID", "type" => "text", "value" =>"channel"}
+            %button{"id" => "btnCreateChannel"} Create
+            %button{"id" => "btnJoinChannel"} Join
 
-%div{"id" => "history"}
-  %form
-    %section{"class" => "sect"}
-      %textarea{"id" => "txtMsg", "rows" => "3", "cols" => "70", "placeholder" => "Hit Enter key to send your message..."}
-      %br
-      %input{"type" => "file", "id" => "files", "name" => "files[]", "multiple" => "" }
-      %output{"id"=> "list"}
-      %div{"class" => "progress"}
-        %div{"class" => "label"}Send Progress:
-        %progress{"id" => "sendProgress", "max" => "0", "value"=>"0"}
-      %div{"class" => "progress"}
-        %div{"class" => "label"}Recieve Progress:
-        %progress{"id" => "receiveProgress", "max" => "0", "value"=>"0"}
+%div{"class" => "row", "id" => "videosRow"}
+  %div{"class" => "col-md-8"}
+    .row
+      %div{"class" => "col-md-3 col-md-offset-3"}
+        %div{"id" => "videosContainer"}
+          %div{"id" => "subscribersDiv"}
+          %div{"id" => "myPublisherDiv"}
+  %div{"class" => "col-md-4"}
+    .row
+      %div{"class" => "col-md-4"}
+        %div{"id" => "history"}
+          %section{"class" => "sect"}
+            %textarea{"id" => "txtMsg", "rows" => "3", "cols" => "50", "placeholder" => "Hit Enter key to send your message..."}
+            %br
+            %input{"type" => "file", "id" => "files", "name" => "files[]", "disable" => "" }
 
-      %a{"id" => "received"}
-
-- content_for :webrtcjs do
-  = javascript_include_tag "//static.opentok.com/v2/js/opentok.min.js"
-  = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"
+            %div{"id" => "file-progress"}
+  
 
 :javascript
   var apiKey = '45173502';
@@ -76,26 +82,6 @@
    if (error) {
      console.log(error.message);
    } else {
-     session.publish('myPublisherDiv', {width: 320, height: 240}); 
+     session.publish('myPublisherDiv', {width: 161, height: 121}); 
    } 
   });
-
-  function bytesToSize(bytes) {
-    if(bytes == 0) return '0 Byte';
-    var k = 1000;
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    var i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
-  }
-
-  function handleFileSelect(evt)
-  {
-    var files = evt.target.files; //Filelist objects
-    var output = [];
-    for (var i = 0, f; f = files[i]; i++) {
-      output.push("<li><strong>", escape(f.name),"</strong> (", f.type || "n/a", ") - ", bytesToSize(f.size), " </li>");
-    }
-    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>'; 
-  }
-
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);

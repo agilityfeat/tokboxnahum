@@ -1,3 +1,33 @@
 // Place all the styles related to the rooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#videosContainer {
+  position: relative;
+  margin: 0px auto;
+  z-index: 1;
+  border: 8px solid white;
+  box-shadow: rgba(0, 0, 0, 0.49804) 0px 2px 6px;
+  height: 450px;
+  line-height: 207px;
+  width: 550px;
+  background: rgb(255, 255, 255);
+}
+
+#myPublisherDiv
+{
+	position:absolute;
+    bottom:0;
+    right: 0;
+}
+
+#subscribersDiv{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 2;
+  border: none;
+  height: 450;
+  width: 535px;
+  background: rgba(0, 0, 0, 0.0980392);
+}

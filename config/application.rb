@@ -20,6 +20,6 @@ module Tokbox
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    Rails.application.config.assets.precompile += %w( adapter.js filetransfer.js)
+    Rails.application.config.assets.precompile += %w( adapter.js filetransfer.js main.js main2.js)
   end
 end

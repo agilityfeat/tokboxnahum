@@ -1,0 +1,28 @@
+document.getElementById('txtChannelID').value = (Math.random() * new Date().getTime()).toString(36).replace(/\./g, '');
+
+var connection = new RTCMultiConnection();
+// file progress-bars container
+connection.body = document.querySelector('#file-progress');
+connection.session = {
+    data: true
+};
+// connection.maxParticipantsAllowed = 1;
+connection.direction = 'one-to-one';
+document.getElementById('btnCreateChannel').onclick = function() {
+    connection.open(document.getElementById('txtChannelID').value || 'txtChannelID');
+    document.getElementById('btnJoinChannel').disabled = true;
+    document.getElementById('btnCreateChannel').disabled = true;
+
+};
+document.getElementById('btnJoinChannel').onclick = function() {
+    connection.connect(document.getElementById('txtChannelID').value || 'txtChannelID');
+    document.getElementById('btnJoinChannel').disabled = true;
+    document.getElementById('btnCreateChannel').disabled = true;
+};
+document.getElementById('files').onchange = function() {
+    var file = this.files[0];
+    connection.send(file);
+};
+connection.onopen = function() {
+    document.getElementById('files').disabled = false;
+};
