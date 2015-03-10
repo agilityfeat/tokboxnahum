@@ -30,7 +30,6 @@
 :javascript
   var apiKey = '45173502';
   var sessionId = "#{@room.session_id}"
-  var session = OT.initSession(apiKey, sessionId); 
   var token = '#{@opentTok_token}';
 
   // Create a session object
@@ -52,7 +51,7 @@
       }
   });
 
-  //To send a signal to a specific client in a session, call the signal() method of the Session object and set the to property of the signal parameter. When another client connected to the session  sends a message, the session's signal event handler is invoked:
+  //To send messages
   var txtMsg = document.querySelector("#txtMsg")
   
   $("#txtMsg").keydown(function(event){
